@@ -49,5 +49,48 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
 
     while(!openList.empty()){
 
+        Node current = openList.top();
+        openList.pop();
+
+        if (current == goal) 
+        {
+            std::vector<Node> path;
+            while (!(current == start)) 
+            {
+                path.push_back(current);
+                current = graph[current.x][current.y];
+            }
+            path.push_back(start);
+            reverse(path.begin(), path.end());
+            return path;
+        }
+
+        closedList[current.x][current.y] = true;
+
+        for (int i = 0; i < 8; ++i) 
+        {
+            int newX = current.x + directionX[i];
+            int newY = current.y + directionY[i];
+
+            if (newX >= 0 && newX < graph.size() && newY >= 0 && newY < grid[0].size()) 
+            {
+                if (graph[newX][newY] == 0 && !closedList[newX][newY]) 
+                {
+                    Node neighbor(newX, newY);
+                    int newG = current.g + 1;
+
+                    if (newG < neighbor.g || !closedList[newX][newY]) 
+                    {
+                        neighbor.g = newG;
+                        neighbor.h = abs(newX - goal.x) + abs(newY - goal.y);
+                        neighbor.f = neighbor.g + neighbor.h;
+                        graph[newX][newY] = current; 
+                        openList.push(neighbor); 
+                    }
+                }
+            }
+        }
     }
+
+    return std::vector<Node>();
 }
