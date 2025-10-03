@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 Node::Node(int _x, int _y): 
 x(_x),
@@ -18,6 +19,12 @@ bool Node::operator==(const Node& other) const{
     return x == other.x && y == other.y;
 }
 
+//implementation of Euclidean Heuristic
+int HeuCost(int sx, int sy, int gx, int gy){
+    int cost = sqrt( pow(((gx-sx) + (gy-sy)), 2) );
+    return cost;
+}
+
 std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Node& start, const Node& goal){
 
     //possible movements
@@ -26,11 +33,11 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
 
     //Initialization of Open and Closed lists
     std::priority_queue<Node, std::vector<Node>, std::greater<Node>> openList;
-    std::vector<std::vector<bool>> closedList(graph.size(), std::vector<bool>(grid[0].size(), false));
+    std::vector<std::vector<bool>> closedList(graph.size(), std::vector<bool>(graph.size(), false));
 
     //starting position
     openList.push(start);
-
+    
     //Processing Loop
     while(!openList.empty()){
 
@@ -45,7 +52,7 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
             while (!(current == start)) 
             {
                 path.push_back(current);
-                current = graph[current.x][current.y];
+                current = current;
             }
             path.push_back(start);
             reverse(path.begin(), path.end());
@@ -62,7 +69,7 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
             int newY = current.y + directionY[i];
 
             //check if in boundary
-            if (newX >= 0 && newX < graph.size() && newY >= 0 && newY < grid[0].size()) 
+            if (newX >= 0 && newX < graph.size() && newY >= 0 && newY < graph.size()) 
             {
                 //Check if walable and not closed
                 if (graph[newX][newY] == 0 && !closedList[newX][newY]) 
@@ -74,9 +81,10 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
                     if (newG < neighbor.g || !closedList[newX][newY]) 
                     {
                         neighbor.g = newG;
-                        neighbor.h = abs(newX - goal.x) + abs(newY - goal.y);
+                        neighbor.h = HeuCost(newX, goal.x, newY, goal.y);
                         neighbor.f = neighbor.g + neighbor.h;
-                        graph[newX][newY] = current; //Update parent point
+                        newX = current.x; //Update parent point x
+                        newY = current.y; //Update parent point y
                         openList.push(neighbor); //Add neighbor to open list
                     }
                 }

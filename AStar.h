@@ -19,6 +19,8 @@ struct Node{
     bool operator>(const Node& other) const;
     bool operator==(const Node& other) const;
 };
+//Heuristic Implementation
+int HeuCost(int sx, int sy, int gx, int gy);
 
 //A* Algorithm Call
 std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Node& start, const Node& goal);
