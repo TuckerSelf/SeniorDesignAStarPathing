@@ -1,24 +1,7 @@
+#include "AStar.h"
+
 #include <iostream>
-#include <vector>
-#include <cmath>
-#include <queue>
 #include <algorithm>
-
-//represents nodes of a graph
-struct Node{
-    int x, y; //coordinates
-    int f, g, h; //A* algorithm values
-    /*
-    g is cost to reach a node from the start node
-    h is the estimated cost to reach the goal node from the current node
-    f is the summation of g and h
-    */
-    
-    Node(int r, int c);
-
-    bool operator>(const Node& other) const;
-    bool operator==(const Node& other) const;
-};
 
 Node::Node(int _x, int _y): 
 x(_x),
@@ -41,19 +24,23 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
     const int directionX[] = {-1, 0, 1, 0, -1, -1, 1, 1};
     const int directionY[] = {0, 1, 0, -1, 1, -1, 1, -1};
 
+    //Initialization of Open and Closed lists
     std::priority_queue<Node, std::vector<Node>, std::greater<Node>> openList;
     std::vector<std::vector<bool>> closedList(graph.size(), std::vector<bool>(grid[0].size(), false));
 
     //starting position
     openList.push(start);
 
+    //Processing Loop
     while(!openList.empty()){
 
+        //Lowest f value
         Node current = openList.top();
         openList.pop();
 
         if (current == goal) 
         {
+            //Rebuild path
             std::vector<Node> path;
             while (!(current == start)) 
             {
@@ -65,32 +52,38 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
             return path;
         }
 
+        //Mark current point as closed
         closedList[current.x][current.y] = true;
 
+        //check neighboring points
         for (int i = 0; i < 8; ++i) 
         {
             int newX = current.x + directionX[i];
             int newY = current.y + directionY[i];
 
+            //check if in boundary
             if (newX >= 0 && newX < graph.size() && newY >= 0 && newY < grid[0].size()) 
             {
+                //Check if walable and not closed
                 if (graph[newX][newY] == 0 && !closedList[newX][newY]) 
                 {
                     Node neighbor(newX, newY);
                     int newG = current.g + 1;
 
+                    //Check if not open or has lower g
                     if (newG < neighbor.g || !closedList[newX][newY]) 
                     {
                         neighbor.g = newG;
                         neighbor.h = abs(newX - goal.x) + abs(newY - goal.y);
                         neighbor.f = neighbor.g + neighbor.h;
-                        graph[newX][newY] = current; 
-                        openList.push(neighbor); 
+                        graph[newX][newY] = current; //Update parent point
+                        openList.push(neighbor); //Add neighbor to open list
                     }
                 }
             }
         }
     }
 
+    //No Path Available
     return std::vector<Node>();
 }
