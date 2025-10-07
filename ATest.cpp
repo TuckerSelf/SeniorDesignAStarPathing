@@ -26,6 +26,7 @@ int main(){
 
     vector<Node> Path = FindPath(graph, start, goal);
 
+    cout << "Path: ";
     PrintPath(Path);
 
 }
