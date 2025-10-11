@@ -21,12 +21,11 @@ int main(){
     Node start(1, 1);
     Node goal(10, 10);
 
-    vector<Node> Path = FindPath(graph, start, goal);
-
     cout << "Graph Size: " << graph.size() << endl;
 
     cout << "Start: " << start.x << ", " << start.y << " Goal: " << goal.x << ", " << goal.y << endl;
     cout << "Path: ";
+    vector<Node> Path = FindPath(graph, start, goal);
     PrintPath(Path);
 
 }
