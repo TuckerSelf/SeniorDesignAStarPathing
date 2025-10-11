@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void PrintPath(const vector<Node>& path);
+void PrintPath(vector<Node>& path);
 
 
 
@@ -12,29 +12,28 @@ void PrintPath(const vector<Node>& path);
 int main(){
     //Define Graph
     //Start and Goal should be valid Node values in graph
-    vector<vector<int>> graph;
     //simple fully filled graph definition
-    for(int i = 0; i < 11; i++){
-        for(int j = 0; j < 11; j++){
-            graph.push_back({i,j});
-        }
-    }
+    vector<vector<int>> graph(10, vector<int>(10,0));
+    
+
 
     //start at top left, end at bottom right
-    Node start(0, 0);
+    Node start(1, 1);
     Node goal(10, 10);
 
     vector<Node> Path = FindPath(graph, start, goal);
 
+    cout << "Graph Size: " << graph.size() << endl;
+
+    cout << "Start: " << start.x << ", " << start.y << " Goal: " << goal.x << ", " << goal.y << endl;
     cout << "Path: ";
     PrintPath(Path);
 
 }
 
-void PrintPath(const vector<Node>& path){
-    for (const Node& node : path) 
-    {
-        std::cout << "(" << node.x << ", " << node.y << ") ";
+void PrintPath(vector<Node>& path){
+    for (Node& node : path){
+        cout << "(" << node.x << ", " << node.y << ") ";
     }
-    std::cout << std::endl;
+    cout << endl;
 }

@@ -45,41 +45,37 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
         Node current = openList.top();
         openList.pop();
 
-        if (current == goal) 
-        {
+        if (current == goal){
             //Rebuild path
             std::vector<Node> path;
             while (!(current == start)) 
             {
                 path.push_back(current);
-                current = current;
+                openList.pop();
+                current = openList.top();
             }
             path.push_back(start);
             reverse(path.begin(), path.end());
             return path;
         }
 
+        
         //Mark current point as closed
         closedList[current.x][current.y] = true;
-
         //check neighboring points
-        for (int i = 0; i < 8; ++i) 
-        {
+        for (int i = 0; i < 8; ++i){
             int newX = current.x + directionX[i];
             int newY = current.y + directionY[i];
 
             //check if in boundary
-            if (newX >= 0 && newX < graph.size() && newY >= 0 && newY < graph.size()) 
-            {
-                //Check if walable and not closed
-                if (graph[newX][newY] == 0 && !closedList[newX][newY]) 
-                {
+            if (newX >= 0 && newX < graph.size() && newY >= 0 && newY < graph.size()){
+                //Check if walkable and not closed
+                if (graph[newX][newY] == 0 && !closedList[newX][newY]){
                     Node neighbor(newX, newY);
                     int newG = current.g + 1;
 
                     //Check if not open or has lower g
-                    if (newG < neighbor.g || !closedList[newX][newY]) 
-                    {
+                    if (!closedList[newX][newY] || newG < neighbor.g){
                         neighbor.g = newG;
                         neighbor.h = HeuCost(newX, goal.x, newY, goal.y);
                         neighbor.f = neighbor.g + neighbor.h;
