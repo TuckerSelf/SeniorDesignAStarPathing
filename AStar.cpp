@@ -38,24 +38,28 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
     //starting position
     openList.push(start);
     
+    std::vector<Node> path;
+
     //Processing Loop
     while(!openList.empty()){
 
         //Lowest f value
+        while(closedList[openList.top().x][openList.top().y])
+            openList.pop();
         Node current = openList.top();
         openList.pop();
 
+        path.push_back(current);
         if (current == goal){
             //Rebuild path
-            std::vector<Node> path;
-            while (!(current == start)) 
+            /*while (!(current == start)) 
             {
                 path.push_back(current);
                 openList.pop();
                 current = openList.top();
             }
-            path.push_back(start);
-            reverse(path.begin(), path.end());
+            //path.push_back(start);
+            reverse(path.begin(), path.end());*/
             return path;
         }
 
@@ -78,9 +82,9 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
                     if (!closedList[newX][newY] || newG < neighbor.g){
                         neighbor.g = newG;
                         neighbor.h = HeuCost(newX, goal.x, newY, goal.y);
-                        neighbor.f = neighbor.g + neighbor.h;
-                        newX = current.x; //Update parent point x
-                        newY = current.y; //Update parent point y
+                        neighbor.f = neighbor.g + neighbor.h; 
+                        //newX = current.x; //Update to parent point x
+                        //newY = current.y; //Update to parent point y
                         openList.push(neighbor); //Add neighbor to open list
                     }
                 }
