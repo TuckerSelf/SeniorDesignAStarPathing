@@ -13,7 +13,7 @@ int main(){
     //Define Graph
     //Start and Goal should be valid Node values in graph
     //simple fully filled graph definition
-    vector<vector<int>> graph(10, vector<int>(10,0));
+    vector<vector<int>> graph(11, vector<int>(11,0));
     
 
 
