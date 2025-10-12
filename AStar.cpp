@@ -20,8 +20,8 @@ bool Node::operator==(const Node& other) const{
 }
 
 //implementation of Euclidean Heuristic
-int HeuCost(int sx, int sy, int gx, int gy){
-    int cost = sqrt( pow(((gx-sx) + (gy-sy)), 2) );
+double HeuCost(int sx, int sy, int gx, int gy){
+    double cost = sqrt(pow(((gx-sx)), 2) + pow((gy-sy), 2));
     return cost;
 }
 
@@ -46,6 +46,7 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
         //Lowest f value
         while(closedList[openList.top().x][openList.top().y])
             openList.pop();
+
         Node current = openList.top();
         openList.pop();
 
@@ -76,7 +77,11 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
                 //Check if walkable and not closed
                 if (graph[newX][newY] == 0 && !closedList[newX][newY]){
                     Node neighbor(newX, newY);
-                    int newG = current.g + 1;
+                    double newG;
+                    if((directionX[i] == 1 && directionY[i] == 0) || (directionX[i] == 0 && directionY[i] == 1) || (directionX[i] == 0 && directionY[i] == -1) || (directionX[i] == -1 && directionY[i] == 0))
+                        newG = current.g + 1;
+                    else
+                        newG = current.g + 1.414;
 
                     //Check if not open or has lower g
                     if (!closedList[newX][newY] || newG < neighbor.g){

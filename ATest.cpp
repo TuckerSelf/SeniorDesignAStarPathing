@@ -32,7 +32,7 @@ int main(){
 
 void PrintPath(vector<Node>& path){
     for (Node& node : path){
-        cout << "(" << node.x << ", " << node.y << ") ";
+        cout << "(" << node.x << ", " << node.y << ") = " << node.f << " ";
     }
     cout << endl;
 }
