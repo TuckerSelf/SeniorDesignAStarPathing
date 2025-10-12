@@ -49,6 +49,7 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
 
         Node current = openList.top();
         openList.pop();
+        current.h = HeuCost(current.x, current.y, goal.x, goal.y);
 
         path.push_back(current);
         if (current == goal){
@@ -86,7 +87,7 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
                     //Check if not open or has lower g
                     if (!closedList[newX][newY] || newG < neighbor.g){
                         neighbor.g = newG;
-                        neighbor.h = HeuCost(newX, goal.x, newY, goal.y);
+                        neighbor.h = HeuCost(newX, newY, goal.x, goal.y);
                         neighbor.f = neighbor.g + neighbor.h; 
                         //newX = current.x; //Update to parent point x
                         //newY = current.y; //Update to parent point y
