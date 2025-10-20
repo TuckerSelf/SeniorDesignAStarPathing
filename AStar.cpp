@@ -45,11 +45,13 @@ std::vector<Node> FindPath(int** graph, const Node& start, const Node& goal){
 
         //Lowest f value
         Node current = openList[0];
+        auto it = std::find(closedList.begin(), closedList.end(), current);
         for(Node& node : openList){
-            auto it = std::find(closedList.begin(), closedList.end(), node);
+            it = std::find(closedList.begin(), closedList.end(), node);
             if(node.f < current.f && it != closedList.end())
                 current = node;
         }
+        openList.erase(it);
 
         current.h = HeuCost(current.x, current.y, goal.x, goal.y);
 
