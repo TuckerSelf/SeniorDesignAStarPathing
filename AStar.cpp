@@ -53,15 +53,6 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
 
         path.push_back(current);
         if (current == goal){
-            //Rebuild path
-            /*while (!(current == start)) 
-            {
-                path.push_back(current);
-                openList.pop();
-                current = openList.top();
-            }
-            //path.push_back(start);
-            reverse(path.begin(), path.end());*/
             return path;
         }
 
@@ -89,8 +80,6 @@ std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Nod
                         neighbor.g = newG;
                         neighbor.h = HeuCost(newX, newY, goal.x, goal.y);
                         neighbor.f = neighbor.g + neighbor.h; 
-                        //newX = current.x; //Update to parent point x
-                        //newY = current.y; //Update to parent point y
                         openList.push(neighbor); //Add neighbor to open list
                     }
                 }
