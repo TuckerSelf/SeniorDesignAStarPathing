@@ -25,7 +25,7 @@ double HeuCost(int sx, int sy, int gx, int gy){
     return cost;
 }
 
-std::vector<Node> FindPath(const int**& graph, const Node& start, const Node& goal){
+std::vector<Node> FindPath(int** graph, const Node& start, const Node& goal){
 
     //possible movements
     const int directionX[] = {-1, 0, 1, 0, -1, -1, 1, 1};

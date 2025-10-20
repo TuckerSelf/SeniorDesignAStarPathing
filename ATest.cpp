@@ -13,15 +13,19 @@ int main(){
     //Define Graph
     //Start and Goal should be valid Node values in graph
     //simple fully filled graph definition
-    vector<vector<int>> graph(11, vector<int>(11,0));
-    
+    int** graph;
+    for(int i = 0; i < 11; i++){
+        for(int j = 0; j < 11; i++){
+            graph[i][j] = 0;
+        }
+    }
 
 
     //start at top left, end at bottom right
     Node start(1, 1);
     Node goal(10, 10);
 
-    cout << "Graph Size: " << graph.size() << endl;
+    cout << "Graph Size: " << sizeof(graph) << endl;
 
     cout << "Start: " << start.x << ", " << start.y << " Goal: " << goal.x << ", " << goal.y << endl;
     cout << "Path: ";
