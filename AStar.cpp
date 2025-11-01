@@ -25,18 +25,18 @@ double HeuCost(int sx, int sy, int gx, int gy){
     return cost;
 }
 
-std::vector<Node> FindPath(int** graph, const Node& start, const Node& goal){
+std::vector<Node> FindPath(const std::vector<std::vector<int>>& graph, const Node& start, const Node& goal){
 
     //possible movements
     const int directionX[] = {-1, 0, 1, 0, -1, -1, 1, 1};
     const int directionY[] = {0, 1, 0, -1, 1, -1, 1, -1};
 
     //Initialization of Open and Closed lists
-    std::vector<Node> openList;
-    std::vector<Node> closedList;
+    std::priority_queue<Node, std::vector<Node>, std::greater<Node>> openList;
+    std::vector<std::vector<bool>> closedList(graph.size(), std::vector<bool>(graph.size(), false));
 
     //starting position
-    openList.push_back(start);
+    openList.push(start);
     
     std::vector<Node> path;
 
@@ -44,15 +44,11 @@ std::vector<Node> FindPath(int** graph, const Node& start, const Node& goal){
     while(!openList.empty()){
 
         //Lowest f value
-        Node current = openList[0];
-        auto it = std::find(closedList.begin(), closedList.end(), current);
-        for(Node& node : openList){
-            it = std::find(closedList.begin(), closedList.end(), node);
-            if(node.f < current.f && it != closedList.end())
-                current = node;
-        }
-        openList.erase(it);
+        while(closedList[openList.top().x][openList.top().y])
+            openList.pop();
 
+        Node current = openList.top();
+        openList.pop();
         current.h = HeuCost(current.x, current.y, goal.x, goal.y);
 
         path.push_back(current);
@@ -62,18 +58,17 @@ std::vector<Node> FindPath(int** graph, const Node& start, const Node& goal){
 
         
         //Mark current point as closed
-        closedList.push_back(current);
+        closedList[current.x][current.y] = true;
         //check neighboring points
         for (int i = 0; i < 8; ++i){
             int newX = current.x + directionX[i];
             int newY = current.y + directionY[i];
 
             //check if in boundary
-            if (newX >= 0 && newX < sizeof(graph) && newY >= 0 && newY < sizeof(graph)){
+            if (newX >= 0 && newX < graph.size() && newY >= 0 && newY < graph.size()){
                 //Check if walkable and not closed
-                if (graph[newX][newY] == 0){
+                if (graph[newX][newY] == 0 && !closedList[newX][newY]){
                     Node neighbor(newX, newY);
-                    auto it = std::find(closedList.begin(), closedList.end(), neighbor);
                     double newG;
                     if((directionX[i] == 1 && directionY[i] == 0) || (directionX[i] == 0 && directionY[i] == 1) || (directionX[i] == 0 && directionY[i] == -1) || (directionX[i] == -1 && directionY[i] == 0))
                         newG = current.g + 1;
@@ -81,11 +76,11 @@ std::vector<Node> FindPath(int** graph, const Node& start, const Node& goal){
                         newG = current.g + 1.414;
 
                     //Check if not open or has lower g
-                    if (it != closedList.end() || newG < neighbor.g){
+                    if (!closedList[newX][newY] || newG < neighbor.g){
                         neighbor.g = newG;
                         neighbor.h = HeuCost(newX, newY, goal.x, goal.y);
                         neighbor.f = neighbor.g + neighbor.h; 
-                        openList.push_back(neighbor); //Add neighbor to open list
+                        openList.push(neighbor); //Add neighbor to open list
                     }
                 }
             }

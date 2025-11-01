@@ -13,22 +13,18 @@ int main(){
     //Define Graph
     //Start and Goal should be valid Node values in graph
     //simple fully filled graph definition
-    int** graph;
-    for(int i = 0; i < 11; i++){
-        for(int j = 0; j < 11; i++){
-            graph[i][j] = 0;
-        }
-    }
+    vector<vector<int>> graph(11, vector<int>(11,0));
+    
 
 
     //start at top left, end at bottom right
     Node start(1, 1);
     Node goal(10, 10);
 
-    cout << "Graph Size: " << sizeof(graph) << endl;
+    cout << "Graph Size: " << graph.size() << endl;
 
     cout << "Start: " << start.x << ", " << start.y << " Goal: " << goal.x << ", " << goal.y << endl;
-    cout << "Path: ";
+    cout << "Path: \n";
     vector<Node> Path = FindPath(graph, start, goal);
     PrintPath(Path);
 
@@ -36,7 +32,7 @@ int main(){
 
 void PrintPath(vector<Node>& path){
     for (Node& node : path){
-        cout << "(" << node.x << ", " << node.y << ") = " << node.f << ", ";
+        cout << "(" << node.x << ", " << node.y << ") G value: " << node.g << ", H value: " << node.h << ", F value: " << node.f << ", \n";
     }
-    cout << endl;
+    cout << "Goal Reached" <<  endl;
 }
